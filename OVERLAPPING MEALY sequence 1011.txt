@@ -101,3 +101,24 @@ module tb;
       $monitor("time=%0t,clk=%0b,reset=%0b,in=%0b,out=%0b",$time,clk,reset,in,out);
     end
 endmodule
+
+
+
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 4548 kB (elbread=427 elab2=4113 kernel=7 sdf=0)
+# KERNEL: ASDB file was created in location /home/runner/dataset.asdb
+# KERNEL: time=0,clk=0,reset=0,in=x,out=0
+# KERNEL: time=5,clk=1,reset=0,in=x,out=0
+# KERNEL: time=10,clk=0,reset=1,in=1,out=0
+# KERNEL: time=15,clk=1,reset=1,in=1,out=0
+# KERNEL: time=20,clk=0,reset=1,in=0,out=0
+# KERNEL: time=25,clk=1,reset=1,in=0,out=0
+# KERNEL: time=30,clk=0,reset=1,in=1,out=0
+# KERNEL: time=35,clk=1,reset=1,in=1,out=1
+# KERNEL: time=40,clk=0,reset=1,in=1,out=1
+# KERNEL: time=45,clk=1,reset=1,in=1,out=0
+# KERNEL: time=50,clk=0,reset=1,in=1,out=0
+# KERNEL: time=55,clk=1,reset=1,in=1,out=0
+# KERNEL: time=60,clk=0,reset=1,in=1,out=0
+# KERNEL: time=65,clk=1,reset=1,in=1,out=0
+# RUNTIME: Info: RUNTIME_0068 testbench.sv (26): $finish called.
