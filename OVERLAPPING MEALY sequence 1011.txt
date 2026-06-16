@@ -1,0 +1,103 @@
+OVERLAPPING MEALY sequence 1011:
+
+module mealy_overlapping_1011(clk,reset,in,out);
+  input clk,reset;
+  input wire in;
+  output reg out;
+  
+  
+  parameter s0 = 2'b00;
+  parameter s1 = 2'b01;
+  parameter s2 = 2'b10;
+  parameter s3 = 2'b11;
+  
+  reg [1:0]current_state,next_state;
+  
+  
+  
+  always @(*) begin
+    next_state = current_state;
+    case(current_state)
+      s0:
+        begin
+          if(in == 1)
+            next_state = s1;
+          else
+            next_state = s0;
+        end
+      s1:
+        begin
+          if(in == 0)
+            next_state = s2;
+          else
+            next_state = s1;
+        end
+      s2:
+        begin
+          if(in == 1)
+            next_state = s3;
+          else
+            next_state = s0;
+        end
+      s3:
+        begin
+          if(in == 1)
+            next_state = s1;
+          else
+            next_state = s2;
+        end
+    endcase
+  end
+  
+  
+  always @(posedge clk or negedge reset) begin
+    if(!reset)
+      current_state <= s0;
+    else
+      current_state <= next_state;
+  end
+  
+  always @(*) begin
+    if(current_state == s3 && in == 1)
+      out = 1;
+    else
+      out = 0;
+  end
+endmodule
+  
+    
+    
+tb:
+module tb;
+  reg clk,reset;
+  reg in;
+  wire out;
+  
+  mealy_overlapping_1011 u1(.out(out),.in(in),.reset(reset),.clk(clk));
+  
+  initial
+    begin
+      clk = 0;
+      forever #5 clk = ~clk;
+    end
+  
+  initial
+    begin
+      reset = 0;
+      #10;
+      
+      reset = 1;
+      in = 1; #10;
+      in = 0; #10;
+      in = 1; #10;
+      in = 1; #10;
+      
+      #20;
+      $finish;
+    end
+  
+  initial
+    begin
+      $monitor("time=%0t,clk=%0b,reset=%0b,in=%0b,out=%0b",$time,clk,reset,in,out);
+    end
+endmodule
