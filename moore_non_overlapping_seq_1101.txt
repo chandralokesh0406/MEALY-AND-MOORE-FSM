@@ -1,0 +1,131 @@
+moore_non_overlapping_seq_1101:
+
+module moore_non_overlapping_seq_1101(clk,reset,in,out);
+  input clk,reset;
+  input wire in;
+  output reg out;
+  
+  parameter s0 = 3'b000;
+  parameter s1 = 3'b001;
+  parameter s2 = 3'b010;
+  parameter s3 = 3'b011;
+  parameter s4 = 3'b100;
+  
+  
+  reg [2:0]current_state,next_state;
+  
+  
+  always @(*) begin
+    next_state = current_state;
+    case(current_state)
+      s0:
+        begin
+          if(in)
+            next_state = s1;
+          else
+            next_state = s0;
+        end
+      s1:
+        begin
+          if(in)
+            next_state = s2;
+          else
+            next_state = s0;
+        end
+      s2:
+        begin
+          if(!in)
+            next_state = s3;
+          else
+            next_state = s2;
+        end
+      s3:
+        begin
+          if(in)
+            next_state = s4;
+          else
+            next_state = s0;
+        end
+      s4:
+        begin
+          if(!in)
+            next_state = s0;
+          else
+            next_state = s1;
+        end
+      default: next_state = s0;
+    endcase
+  end
+  
+  
+  always @(posedge clk or negedge reset) begin
+    if(!reset)
+      current_state <= s0;
+    else
+      current_state <= next_state;
+  end
+  
+  always @(*) begin
+    if( current_state == s4)
+      out = 1;
+    else
+      out = 0;
+  end
+endmodule
+
+tb:
+module tb;
+  reg clk,reset;
+  reg in;
+  wire out;
+  
+  
+  
+  moore_non_overlapping_seq_1101 u1(.out(out),.in(in),.reset(reset),.clk(clk));
+  
+  initial
+    begin
+      clk = 0;
+      forever #5 clk = ~clk;
+    end
+  
+  initial
+    begin
+      reset = 0; #10;
+      reset = 1;
+      in = 1'b1;
+      #10;
+      in = 1'b1;
+      #10;
+      in = 1'b0;
+      #10;
+      in = 1'b1;
+      #20;
+      $finish;
+    end
+  
+  initial
+    begin
+      $monitor("time=%0t,clk=%0b,reset=%0b,in=%0b,out=%0b",$time,clk,reset,in,out);
+    end
+endmodule
+  
+  
+output:
+# Allocation: Simulator allocated 4549 kB (elbread=427 elab2=4115 kernel=7 sdf=0)
+# KERNEL: ASDB file was created in location /home/runner/dataset.asdb
+# KERNEL: time=0,clk=0,reset=0,in=x,out=0
+# KERNEL: time=5,clk=1,reset=0,in=x,out=0
+# KERNEL: time=10,clk=0,reset=1,in=1,out=0
+# KERNEL: time=15,clk=1,reset=1,in=1,out=0
+# KERNEL: time=20,clk=0,reset=1,in=1,out=0
+# KERNEL: time=25,clk=1,reset=1,in=1,out=0
+# KERNEL: time=30,clk=0,reset=1,in=0,out=0
+# KERNEL: time=35,clk=1,reset=1,in=0,out=0
+# KERNEL: time=40,clk=0,reset=1,in=1,out=0
+# KERNEL: time=45,clk=1,reset=1,in=1,out=1
+# KERNEL: time=50,clk=0,reset=1,in=1,out=1
+# KERNEL: time=55,clk=1,reset=1,in=1,out=0
+# RUNTIME: Info: RUNTIME_0068 testbench.sv (28): $finish called.
+  
+  
